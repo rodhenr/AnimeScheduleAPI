@@ -1,5 +1,4 @@
 using AnimeScheduleAPI.Services;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
