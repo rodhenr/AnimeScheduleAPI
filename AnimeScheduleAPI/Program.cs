@@ -9,6 +9,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAniListService, AniListService>();
 
+builder.Services.AddHttpClient("AniListClient", c =>
+{
+    c.BaseAddress = new Uri("https://graphql.anilist.co");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
