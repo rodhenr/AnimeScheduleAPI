@@ -25,7 +25,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/getSchedule", async (IAniListService aniListService) => Results.Ok(await aniListService.GetAnimesSchedule()))
+app.MapGet("/getWeeklySchedule", async (IAniListService aniListService, DateTime date) => Results.Ok(await aniListService.GetWeeklySchedule(date)))
     .WithName("getSchedule")
     .WithOpenApi();
 
