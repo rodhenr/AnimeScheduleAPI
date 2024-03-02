@@ -1,18 +1,27 @@
+using System.Text.Json.Serialization;
+using AnimeScheduleAPI.Enums;
 using AnimeScheduleAPI.Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "AnimeScheduleAPI",
+        Description = "An API to retrieve anime schedule from AniList API",
+        Contact = new OpenApiContact { Name = "Rodrigo Henrique", Email = "https://github.com/rodhenr" }
+    });
+});
 
 builder.Services.AddScoped<IAniListService, AniListService>();
 
-builder.Services.AddHttpClient("AniListClient", c =>
-{
-    c.BaseAddress = new Uri("https://graphql.anilist.co");
-});
+builder.Services.AddHttpClient("AniListClient", c => { c.BaseAddress = new Uri("https://graphql.anilist.co"); });
 
 var app = builder.Build();
 
@@ -25,8 +34,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/getWeeklySchedule", async (IAniListService aniListService, DateTime date) => Results.Ok(await aniListService.GetWeeklySchedule(date)))
-    .WithName("getSchedule")
+app.MapGet("/getSchedules",
+        async (IAniListService aniListService, DateTime date, SearchTypesEnum searchType) =>
+            Results.Ok(await aniListService.GetSchedules(date, searchType)))
+    .WithName("getSchedules")
     .WithOpenApi();
 
 app.Run();

@@ -14,7 +14,7 @@ public record Data
 
 public record Page
 {
-    [JsonPropertyName("airingSchedules")] public IEnumerable<AiringSchedules> AiringSchedules { get; init; }
+    [JsonPropertyName("airingSchedules")] public List<AiringSchedules> AiringSchedules { get; init; }
 }
 
 public record AiringSchedules
