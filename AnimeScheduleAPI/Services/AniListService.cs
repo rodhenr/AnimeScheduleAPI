@@ -96,6 +96,7 @@ public class AniListService : IAniListService
                               }
                               format
                               type
+                              countryOfOrigin
                           }
                       }
                   }

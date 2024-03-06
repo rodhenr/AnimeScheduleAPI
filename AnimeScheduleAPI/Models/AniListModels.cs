@@ -4,51 +4,53 @@ namespace AnimeScheduleAPI.Models;
 
 public record ApiResponse
 {
-    [JsonPropertyName("data")] public Data Data { get; init; }
+    [JsonPropertyName("data")] public required Data Data { get; init; }
 }
 
 public record Data
 {
-    [JsonPropertyName("Page")] public Page Page { get; init; }
+    [JsonPropertyName("Page")] public required Page Page { get; init; }
 }
 
 public record Page
 {
-    [JsonPropertyName("airingSchedules")] public List<AiringSchedules> AiringSchedules { get; init; }
+    [JsonPropertyName("airingSchedules")] public required List<AiringSchedules> AiringSchedules { get; init; }
 }
 
 public record AiringSchedules
 {
-    [JsonPropertyName("mediaId")] public int MediaId { get; init; }
+    [JsonPropertyName("mediaId")] public required int MediaId { get; init; }
     
-    [JsonPropertyName("episode")] public int Episode { get; init; }
+    [JsonPropertyName("episode")] public required int Episode { get; init; }
     
-    [JsonPropertyName("airingAt")] public DateTime AiringAt { get; init; }
+    [JsonPropertyName("airingAt")] public required DateTime AiringAt { get; init; }
     
-    [JsonPropertyName("media")] public Media Media { get; init; }
+    [JsonPropertyName("media")] public required Media Media { get; init; }
 }
 
 public record Media
 {
-    [JsonPropertyName("siteUrl")] public string Url { get; init; } = null!;
+    [JsonPropertyName("siteUrl")] public required string Url { get; init; }
     
-    [JsonPropertyName("title")] public Title Titles { get; init; }
+    [JsonPropertyName("title")] public required Title Titles { get; init; }
 
-    [JsonPropertyName("coverImage")] public CoverImage CoverImage { get; init; }
+    [JsonPropertyName("coverImage")] public required CoverImage CoverImage { get; init; }
     
-    [JsonPropertyName("format")] public string Format { get; init; }
+    [JsonPropertyName("format")] public required string Format { get; init; }
     
-    [JsonPropertyName("type")] public string Type { get; init; }
+    [JsonPropertyName("type")] public required string Type { get; init; }
+    
+    [JsonPropertyName("countryOfOrigin")] public required string CountryOfOrigin { get; init; }
 }
 
 public record Title
 {
-    [JsonPropertyName("romaji")] public string Romaji { get; init; } = null!;
+    [JsonPropertyName("romaji")] public required string Romaji { get; init; }
 
-    [JsonPropertyName("english")] public string English { get; init; } = null!;
+    [JsonPropertyName("english")] public required string English { get; init; }
 }
 
 public record CoverImage
 {
-    [JsonPropertyName("extraLarge")] public string Url { get; init; } = null!;
+    [JsonPropertyName("extraLarge")] public required string Url { get; init; }
 }
