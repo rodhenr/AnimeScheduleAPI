@@ -1,6 +1,9 @@
 using System.Text.Json.Serialization;
 using AnimeScheduleAPI.Enums;
+using AnimeScheduleAPI.Models;
 using AnimeScheduleAPI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +32,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddScoped<IAniListService, AniListService>();
 
 builder.Services.AddHttpClient("AniListClient", c => { c.BaseAddress = new Uri("https://graphql.anilist.co"); });
@@ -47,8 +52,22 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapGet("/getSchedules",
-        async (IAniListService aniListService, DateTime date, SearchTypesEnum searchType) =>
-            Results.Ok(await aniListService.GetSchedules(date, searchType)))
+        async ([FromServices] IMemoryCache cache, [FromServices] IAniListService aniListService,
+            [FromQuery] DateTime date, [FromQuery] SearchTypesEnum searchType) =>
+        {
+            var cacheKey = $"{date:yyyy-MM-dd}_{searchType}";
+            
+            if (cache.TryGetValue(cacheKey, out List<AiringSchedules>? schedules)) return Results.Ok(schedules);
+
+            schedules = await aniListService.GetSchedules(date, searchType);
+            
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromDays(7));
+
+            cache.Set(cacheKey, schedules, cacheEntryOptions);
+
+            return Results.Ok(schedules);
+        })
     .WithName("getSchedules")
     .WithOpenApi();
 
