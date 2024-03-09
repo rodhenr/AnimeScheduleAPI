@@ -1,6 +1,11 @@
+using System.Text.Json;
+using AnimeScheduleAPI.Converters;
 using AnimeScheduleAPI.DTOs;
 using AnimeScheduleAPI.Enums;
 using AnimeScheduleAPI.Services;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.SystemTextJson;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.OpenApi.Models;
@@ -9,17 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.EnableAnnotations();
-
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "AnimeScheduleAPI",
-        Description = "An API to retrieve anime schedule from AniList API",
-        Contact = new OpenApiContact { Name = "Rodrigo Henrique", Email = "https://github.com/rodhenr" }
-    });
-});
+builder.Services.AddSwaggerGen(options => { options.EnableAnnotations(); });
 
 builder.Services.AddCors(options =>
 {
@@ -31,11 +26,23 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AutoRegister();
 builder.Services.AddMemoryCache();
-
-builder.Services.AddScoped<IAniListService, AniListService>();
-
 builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<IGraphQLClient>(s =>
+{
+    var jsonOptions = new JsonSerializerOptions()
+    {
+        Converters = { new DataConverter() }
+    };
+
+    return new GraphQLHttpClient(new GraphQLHttpClientOptions
+        {
+            EndPoint = new Uri(builder.Configuration["AniListGraphQLServerUri"])
+        },
+        new SystemTextJsonSerializer(jsonOptions));
+});
 
 var app = builder.Build();
 
