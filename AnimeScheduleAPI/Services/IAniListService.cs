@@ -1,9 +1,10 @@
+using AnimeScheduleAPI.DTOs;
 using AnimeScheduleAPI.Enums;
-using AnimeScheduleAPI.Models;
 
 namespace AnimeScheduleAPI.Services;
 
 public interface IAniListService
 {
-    public Task<List<AiringSchedules>> GetSchedules(DateTime date, SearchTypesEnum searchType);
+    public Task<List<AiringSchedule>> GetSchedules(DateTime date, SearchTypesEnum searchType);
+    public Task<AnimeInfo> GetAnimeInfo(int id);
 }

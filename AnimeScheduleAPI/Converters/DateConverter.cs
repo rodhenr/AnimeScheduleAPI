@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AnimeScheduleAPI.Helpers;
+namespace AnimeScheduleAPI.Converters;
 
-public class UnixTimestampConverter : JsonConverter<DateTime>
+public class DataConverter : JsonConverter<DateTime>
 {
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
