@@ -30,19 +30,13 @@ builder.Services.AutoRegister();
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<IGraphQLClient>(s =>
-{
-    var jsonOptions = new JsonSerializerOptions()
+builder.Services.AddScoped<IGraphQLClient>(s => new GraphQLHttpClient(
+    new GraphQLHttpClientOptions
     {
-        Converters = { new DataConverter() }
-    };
-
-    return new GraphQLHttpClient(new GraphQLHttpClientOptions
-        {
-            EndPoint = new Uri(builder.Configuration["AniListGraphQLServerUri"])
-        },
-        new SystemTextJsonSerializer(jsonOptions));
-});
+        EndPoint = new Uri(builder.Configuration["AniListGraphQLServerUri"])
+    },
+    new SystemTextJsonSerializer())
+);
 
 var app = builder.Build();
 
