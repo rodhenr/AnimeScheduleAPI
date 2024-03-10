@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using GraphQL.Client.Http;
+using GraphQL;
+using GraphQL.Client.Abstractions;
 using AnimeScheduleAPI.DTOs;
 using AnimeScheduleAPI.Enums;
 using AnimeScheduleAPI.Exceptions;
 using AnimeScheduleAPI.Extensions;
 using AnimeScheduleAPI.GraphQLQueries;
-using GraphQL;
-using GraphQL.Client.Abstractions;
 
 namespace AnimeScheduleAPI.Services;
 

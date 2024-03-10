@@ -1,14 +1,11 @@
-using System.Text.Json;
-using AnimeScheduleAPI.Converters;
-using AnimeScheduleAPI.DTOs;
-using AnimeScheduleAPI.Enums;
-using AnimeScheduleAPI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.SystemTextJson;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.OpenApi.Models;
+using AnimeScheduleAPI.DTOs;
+using AnimeScheduleAPI.Enums;
+using AnimeScheduleAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,11 +69,24 @@ app.MapGet("/getSchedules",
     .WithOpenApi();
 
 app.MapGet("/getAnimeInfo",
-        async ([FromServices] IAniListService aniListService, [FromQuery] int id) =>
+        async ([FromServices] IMemoryCache cache, [FromServices] IAniListService aniListService, [FromQuery] int id) =>
         {
-            var data = await aniListService.GetAnimeInfo(id);
+            var cacheKey = $"info_{id}";
 
-            return Results.Ok(data);
+            if (cache.TryGetValue(cacheKey, out AnimeInfo? animeInfo)) return Results.Ok(animeInfo);
+            
+            animeInfo = await aniListService.GetAnimeInfo(id);
+            
+            var expirationTime = animeInfo?.NextAiringEpisode?.AiringAt ?? DateTime.Now.AddDays(3);
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpiration = expirationTime
+            };
+
+            cache.Set(cacheKey, animeInfo, cacheEntryOptions);
+
+            return Results.Ok(animeInfo);
         })
     .WithName("getAnimeInfo")
     .WithOpenApi();

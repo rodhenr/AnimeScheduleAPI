@@ -54,5 +54,5 @@ public record NextAiringEpisode
     [JsonConverter(typeof(UnixDateTimeConverter))]
     public required DateTime AiringAt { get; init; }
 
-    public required int Episode { get; init; }
+    public required int? Episode { get; init; }
 }
