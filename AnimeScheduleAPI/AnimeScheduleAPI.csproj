@@ -7,29 +7,29 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoRegisterInject" Version="1.3.1" />
-        <PackageReference Include="GraphQL.Client" Version="6.0.2" />
-        <PackageReference Include="GraphQL.Client.Abstractions" Version="6.0.2" />
-        <PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+        <PackageReference Include="AutoRegisterInject" Version="1.3.1"/>
+        <PackageReference Include="GraphQL.Client" Version="6.0.3"/>
+        <PackageReference Include="GraphQL.Client.Abstractions" Version="6.0.3"/>
+        <PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.0.3"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Utils\**" />
+        <Compile Remove="Utils\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Remove="Utils\**" />
+        <EmbeddedResource Remove="Utils\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Remove="Utils\**" />
+        <Content Remove="Utils\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Utils\**" />
+        <None Remove="Utils\**"/>
     </ItemGroup>
 
 </Project>

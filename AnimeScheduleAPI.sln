@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimeScheduleAPI", "AnimeScheduleAPI\AnimeScheduleAPI.csproj", "{110545D4-E9B8-4DAA-86C9-1ED9F962C11E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimeScheduleAPI.UnitTests", "AnimeScheduleAPI.UnitTests\AnimeScheduleAPI.UnitTests.csproj", "{0B56A6E7-6CB3-43ED-B442-B2655051EE28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{110545D4-E9B8-4DAA-86C9-1ED9F962C11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{110545D4-E9B8-4DAA-86C9-1ED9F962C11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{110545D4-E9B8-4DAA-86C9-1ED9F962C11E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B56A6E7-6CB3-43ED-B442-B2655051EE28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B56A6E7-6CB3-43ED-B442-B2655051EE28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B56A6E7-6CB3-43ED-B442-B2655051EE28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B56A6E7-6CB3-43ED-B442-B2655051EE28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

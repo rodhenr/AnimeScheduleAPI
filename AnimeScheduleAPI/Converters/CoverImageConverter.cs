@@ -10,8 +10,11 @@ public class CoverImageConverter : JsonConverter<string>
         using var document = JsonDocument.ParseValue(ref reader);
         var root = document.RootElement;
 
-       return root.GetProperty("extraLarge").GetString();
+        return root.GetProperty("extraLarge").GetString();
     }
 
-    public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options) => writer.WriteStringValue(value);
+    public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value);
+    }
 }

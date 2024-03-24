@@ -1,12 +1,12 @@
 ﻿using System.Net;
-using GraphQL.Client.Http;
-using GraphQL;
-using GraphQL.Client.Abstractions;
 using AnimeScheduleAPI.DTOs;
 using AnimeScheduleAPI.Enums;
 using AnimeScheduleAPI.Exceptions;
 using AnimeScheduleAPI.Extensions;
 using AnimeScheduleAPI.GraphQLQueries;
+using GraphQL;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
 
 namespace AnimeScheduleAPI.Services;
 
@@ -57,9 +57,7 @@ public class AniListService : IAniListService
 
         var graphQlHttpResponse = response.AsGraphQLHttpResponse();
         if (graphQlHttpResponse.StatusCode != HttpStatusCode.OK || graphQlHttpResponse.Data == null)
-        {
             throw new GraphQlQueryException("The query encountered an error.");
-        }
 
         return response.Data;
     }

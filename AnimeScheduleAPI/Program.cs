@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using GraphQL.Client.Abstractions;
-using GraphQL.Client.Http;
-using GraphQL.Client.Serializer.SystemTextJson;
 using AnimeScheduleAPI.DTOs;
 using AnimeScheduleAPI.Enums;
 using AnimeScheduleAPI.Services;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.SystemTextJson;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +30,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IGraphQLClient>(s => new GraphQLHttpClient(
     new GraphQLHttpClientOptions
     {
-        EndPoint = new Uri(builder.Configuration["AniListGraphQLServerUri"])
+        EndPoint = new Uri(builder.Configuration["AniListGraphQLServerUri"]!)
     },
     new SystemTextJsonSerializer())
 );
@@ -74,9 +74,9 @@ app.MapGet("/getAnimeInfo",
             var cacheKey = $"info_{id}";
 
             if (cache.TryGetValue(cacheKey, out AnimeInfo? animeInfo)) return Results.Ok(animeInfo);
-            
+
             animeInfo = await aniListService.GetAnimeInfo(id);
-            
+
             var expirationTime = animeInfo?.NextAiringEpisode?.AiringAt ?? DateTime.Now.AddDays(3);
 
             var cacheEntryOptions = new MemoryCacheEntryOptions

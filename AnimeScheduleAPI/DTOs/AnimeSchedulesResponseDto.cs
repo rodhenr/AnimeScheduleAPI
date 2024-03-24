@@ -17,7 +17,7 @@ public record AiringSchedule
     public required DateTime AiringAt { get; init; }
 
     public required Media Media { get; init; }
-};
+}
 
 public record Media
 {
