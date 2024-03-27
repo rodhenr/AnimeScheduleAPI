@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AnimeScheduleAPI.Extensions;
 
 namespace AnimeScheduleAPI.Converters;
 
@@ -10,26 +11,25 @@ public class AnimeDateConverter : JsonConverter<DateTime?>
         using var document = JsonDocument.ParseValue(ref reader);
         var root = document.RootElement;
 
-        if (!root.TryGetProperty("year", out var yearElement) || !root.TryGetProperty("month", out var monthElement) ||
-            !root.TryGetProperty("day", out var dayElement))
+        if (!root.TryGetProperty("year", out var yearElement) || yearElement.ValueKind == JsonValueKind.Null ||
+            !root.TryGetProperty("month", out var monthElement) || monthElement.ValueKind == JsonValueKind.Null ||
+            !root.TryGetProperty("day", out var dayElement) || dayElement.ValueKind == JsonValueKind.Null)
+        {
             return null;
-
-        if (yearElement.ValueKind == JsonValueKind.Null || monthElement.ValueKind == JsonValueKind.Null ||
-            dayElement.ValueKind == JsonValueKind.Null)
-            return null;
-
-        var year = root.GetProperty("year").GetInt32();
-        var month = root.GetProperty("month").GetInt32();
-        var day = root.GetProperty("day").GetInt32();
-
-        return new DateTime(year, month, day);
+        }
+        
+        return new DateTime(yearElement.GetInt32(), monthElement.GetInt32(), dayElement.GetInt32());
     }
 
     public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
     {
         if (value.HasValue)
+        {
             writer.WriteStringValue(value.Value.ToString("yyyy-MM-ddTHH:mmZ"));
+        }
         else
-            writer.WriteNullValue(); // Write null if the DateTime? value is null
+        {
+            writer.WriteNullValue();
+        }
     }
 }

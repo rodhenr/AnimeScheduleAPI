@@ -22,11 +22,13 @@ public class AniListServiceTests
         _aniListService = new AniListService(_mockClient.Object);
     }
 
-    [Fact]
-    public async Task GetSchedules_ReturnsDailySchedules()
+    [Theory]
+    [InlineData(HttpStatusCode.OK, true)]
+    [InlineData(HttpStatusCode.OK, false)]
+    public async Task GetSchedules_ReturnsDailySchedules(HttpStatusCode responseStatusCode, bool hasSchedules)
     {
         // Arrange
-        var schedules = new Schedules(
+        var schedules = !hasSchedules ? new Schedules([]) : new Schedules(
         [
             new AiringSchedule
             {
@@ -75,7 +77,7 @@ public class AniListServiceTests
                 client.SendQueryAsync<AnimeSchedulesResponseDto>(It.IsAny<GraphQLRequest>(),
                     It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GraphQLHttpResponse<AnimeSchedulesResponseDto>(queryResponse,
-                new HttpResponseMessage().Headers, HttpStatusCode.OK))
+                new HttpResponseMessage().Headers, responseStatusCode))
             .ReturnsAsync(
                 new GraphQLHttpResponse<AnimeSchedulesResponseDto>(emptyResponse, new HttpResponseMessage().Headers,
                     HttpStatusCode.OK));
@@ -85,9 +87,9 @@ public class AniListServiceTests
 
         // Assert
         _mockClient.Verify(service => service.SendQueryAsync<AnimeSchedulesResponseDto>(It.IsAny<GraphQLRequest>(),
-            It.IsAny<CancellationToken>()), Times.Exactly(2));
+            It.IsAny<CancellationToken>()), !hasSchedules ? Times.Exactly(1) : Times.Exactly(2));
 
-        Assert.Equal(result, schedules.AiringSchedules);
+        Assert.Equal(hasSchedules ? schedules.AiringSchedules : Array.Empty<AiringSchedule>(), result);
     }
 
     [Fact]

@@ -7,10 +7,18 @@ public class CoverImageConverter : JsonConverter<string>
 {
     public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        using var document = JsonDocument.ParseValue(ref reader);
-        var root = document.RootElement;
+        if (!JsonDocument.TryParseValue(ref reader, out var document))
+            return null;
 
-        return root.GetProperty("extraLarge").GetString();
+        try
+        {
+            var root = document.RootElement;
+            return root.TryGetProperty("extraLarge", out var extraLargeElement) ? extraLargeElement.GetString() : null;
+        }
+        finally
+        {
+            document.Dispose();
+        }
     }
 
     public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
